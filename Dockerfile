@@ -10,4 +10,4 @@ WORKDIR /app
 COPY --from=builder /app/target/mediai-healthcare-1.0.0.jar app.jar
 ENV PORT=8080
 EXPOSE 8080
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar", "--spring.profiles.active=h2"]
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Dserver.port=${PORT}", "-jar", "app.jar", "--spring.profiles.active=h2"]

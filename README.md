@@ -12,6 +12,8 @@ A complete, production-grade **Full-Stack Java Enterprise Web Application** desi
 🌐 **GitHub Repository:** [https://github.com/priyanshuraj8499/mediai-smart-healthcare](https://github.com/priyanshuraj8499/mediai-smart-healthcare)  
 🚀 **Live Deployed URL:** [https://military-sons-est-waiver.trycloudflare.com](https://military-sons-est-waiver.trycloudflare.com)
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/priyanshuraj8499/mediai-smart-healthcare)
+
 ---
 
 ## 🏥 Design Theme & Visual Identity
