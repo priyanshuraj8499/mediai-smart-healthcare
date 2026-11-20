@@ -5,12 +5,12 @@
 [![Security](https://img.shields.io/badge/Spring%20Security-6.x-6DB33F?logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![Database](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Frontend](https://img.shields.io/badge/Thymeleaf%20%7C%20Bootstrap-5.3-2563EB?logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-22C55E?logo=cloudflare)](https://too-yrs-carlos-corps.trycloudflare.com)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-22C55E?logo=cloudflare)](https://military-sons-est-waiver.trycloudflare.com)
 
 A complete, production-grade **Full-Stack Java Enterprise Web Application** designed for hospital administration, physician workflows, continuous patient telemetry, and AI-assisted preliminary clinical diagnosis. Built exclusively with **Java 17, Spring Boot 3, Spring Data JPA, Hibernate, Spring Security, MySQL 8.0, Thymeleaf, and Bootstrap 5**.
 
 🌐 **GitHub Repository:** [https://github.com/priyanshuraj8499/mediai-smart-healthcare](https://github.com/priyanshuraj8499/mediai-smart-healthcare)  
-🚀 **Live Deployed URL:** [https://too-yrs-carlos-corps.trycloudflare.com](https://too-yrs-carlos-corps.trycloudflare.com)
+🚀 **Live Deployed URL:** [https://military-sons-est-waiver.trycloudflare.com](https://military-sons-est-waiver.trycloudflare.com)
 
 ---
 
