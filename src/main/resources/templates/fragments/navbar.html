@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+
+<!-- REUSABLE NAVBAR FRAGMENT -->
+<div th:fragment="navbar">
+  <!-- Top System & Demo Status Bar -->
+  <div class="demo-top-bar">
+    <div class="container-fluid px-lg-5 d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <span class="d-inline-flex align-items-center gap-1.5 fw-semibold text-primary">
+          <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.5rem; height: 0.5rem;" role="status"></span>
+          MediAI Health OS Online
+        </span>
+        <span class="badge bg-white text-dark border">
+          <i class="bi bi-database me-1 text-primary"></i> Backend: <strong>Java 17 Spring Boot 3.3</strong>
+        </span>
+        <span class="badge bg-white text-dark border d-none d-md-inline-block">
+          <i class="bi bi-cpu me-1 text-info"></i> AI: <strong>Clinical Rule Engine &amp; Gemini 1.5</strong>
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="text-muted d-none d-sm-inline">Quick Demo Logins:</span>
+        <form th:action="@{/login}" method="post" class="d-inline">
+          <input type="hidden" name="email" value="admin@mediai.health" />
+          <input type="hidden" name="password" value="password123" />
+          <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.7rem;">Admin</button>
+        </form>
+        <form th:action="@{/login}" method="post" class="d-inline">
+          <input type="hidden" name="email" value="dr.marcus@mediai.health" />
+          <input type="hidden" name="password" value="password123" />
+          <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.7rem;">Doctor</button>
+        </form>
+        <form th:action="@{/login}" method="post" class="d-inline">
+          <input type="hidden" name="email" value="patient@mediai.health" />
+          <input type="hidden" name="password" value="password123" />
+          <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.7rem;">Patient</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-2">
+    <div class="container-fluid px-lg-5">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+        <div class="rounded-3 d-flex align-items-center justify-content-center text-white" 
+             style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #2563EB, #14B8A6);">
+          <i class="bi bi-heart-pulse-fill fs-5 animate-heart"></i>
+        </div>
+        <div>
+          <span class="fw-bold fs-4 text-dark">Medi<span class="text-primary">AI</span></span>
+          <span class="badge badge-soft-teal ms-1" style="font-size: 0.65rem;">HEALTH OS</span>
+        </div>
+      </a>
+
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMediAI">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav Links -->
+      <div class="collapse navbar-collapse" id="navbarMediAI">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium text-primary" th:href="@{/patient/diagnosis}">
+              <i class="bi bi-cpu me-1"></i>AI Diagnosis <span class="badge badge-soft-blue ms-1" style="font-size: 0.65rem;">AI</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium text-teal" th:href="@{/patient/monitoring}">
+              <i class="bi bi-activity me-1"></i>Monitoring <span class="badge badge-soft-teal ms-1" style="font-size: 0.65rem;">Live</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/patient/book-appointment}">Appointments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/doctors}">Doctors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/features}">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/about}">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fw-medium" th:href="@{/contact}">Contact</a>
+          </li>
+        </ul>
+
+        <!-- Right Side User Menu / Auth Buttons -->
+        <div class="d-flex align-items-center gap-2">
+          <!-- Anonymous Visitor -->
+          <div sec:authorize="isAnonymous()" class="d-flex align-items-center gap-2">
+            <a th:href="@{/login}" class="btn btn-outline-medical btn-sm px-3">Sign In</a>
+            <a th:href="@{/register}" class="btn btn-primary-medical btn-sm px-3">Get Started</a>
+          </div>
+
+          <!-- Authenticated User -->
+          <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-sm badge-soft-blue px-3 py-2 fw-semibold">
+              <i class="bi bi-speedometer2 me-1"></i>Admin Dashboard
+            </a>
+            <a sec:authorize="hasRole('ROLE_DOCTOR')" th:href="@{/doctor/dashboard}" class="btn btn-sm badge-soft-teal px-3 py-2 fw-semibold">
+              <i class="bi bi-stethoscope me-1"></i>Doctor Portal
+            </a>
+            <a sec:authorize="hasRole('ROLE_PATIENT')" th:href="@{/patient/dashboard}" class="btn btn-sm badge-soft-blue px-3 py-2 fw-semibold">
+              <i class="bi bi-person-circle me-1"></i>Patient Portal
+            </a>
+
+            <!-- Logout Button -->
+            <form th:action="@{/logout}" method="post" class="d-inline">
+              <button type="submit" class="btn btn-sm btn-outline-danger px-2.5 py-1.5" title="Sign Out">
+                <i class="bi bi-box-arrow-right"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Patients – MediAI Hospital Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('patients')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}" class="text-decoration-none">Dashboard</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Patients Roster</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">Registered Patients Census</h2>
+          <p class="text-muted small mb-0">Patient demographic records, attending primary physicians, blood types, and telemetry links.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Quick Summary Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="small text-muted text-uppercase fw-bold">Active Patient Roster</div>
+            <div class="h3 fw-extrabold text-primary mb-0" th:text="${patients.size()}">3</div>
+            <small class="text-muted">Unique EHR records</small>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="small text-muted text-uppercase fw-bold">Telemetry Monitored</div>
+            <div class="h3 fw-extrabold text-teal mb-0" th:text="${patients.size()}">3</div>
+            <small class="text-muted">Active vital streams</small>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="small text-muted text-uppercase fw-bold">EHR Privacy</div>
+            <div class="h3 fw-extrabold text-success mb-0">HIPAA Compliant</div>
+            <small class="text-muted">Encrypted database storage</small>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="small text-muted text-uppercase fw-bold">Emergency Coverage</div>
+            <div class="h3 fw-extrabold text-dark mb-0">24 / 7</div>
+            <small class="text-muted">On-call rapid response</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patients Table Card -->
+      <div class="mediai-card overflow-hidden">
+        <div class="p-3 bg-white border-bottom d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+          <h5 class="fw-bold text-dark mb-0">Patient Census Directory</h5>
+          <div class="input-group input-group-sm" style="max-width: 280px;">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" id="patientTableSearch" class="form-control border-start-0" placeholder="Search patients..." onkeyup="filterPatients()">
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="patientsTable">
+            <thead class="table-light text-uppercase small text-muted" style="font-size: 0.75rem;">
+              <tr>
+                <th class="ps-3">Patient Name</th>
+                <th>DOB / Age</th>
+                <th>Gender</th>
+                <th>Blood Group</th>
+                <th>Emergency Contact</th>
+                <th>Assigned Physician</th>
+                <th>Chronic Conditions</th>
+                <th class="pe-3 text-end">Telemetry Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="p : ${patients}">
+                <td class="ps-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center"
+                         style="width: 2.25rem; height: 2.25rem; font-size: 0.85rem;"
+                         th:text="${#strings.substring(p.fullName,0,1)}">A</div>
+                    <div>
+                      <div class="fw-bold text-dark" th:text="${p.fullName}">Alexander Hayes</div>
+                      <small class="text-muted" th:text="${p.user != null ? p.user.email : 'N/A'}">patient@mediai.health</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="small text-muted" th:text="${p.dateOfBirth != null ? #temporals.format(p.dateOfBirth, 'dd MMM yyyy') : 'N/A'}">14 May 1988</td>
+                <td>
+                  <span class="badge bg-light text-dark border" th:text="${p.gender}">Male</span>
+                </td>
+                <td>
+                  <span class="badge badge-soft-amber fw-bold" th:text="${p.bloodGroup != null ? p.bloodGroup : 'O+'}">O+</span>
+                </td>
+                <td class="small">
+                  <div class="fw-medium text-dark" th:text="${p.emergencyContactPhone != null ? p.emergencyContactPhone : '+1 (555) 234-5678'}">+1 (555) 234-5678</div>
+                  <small class="text-muted" th:text="${p.emergencyContactName != null ? p.emergencyContactName : 'Kin'}">Spouse</small>
+                </td>
+                <td>
+                  <div th:if="${p.assignedDoctor != null}" class="d-flex align-items-center gap-1">
+                    <i class="bi bi-person-badge text-primary"></i>
+                    <span class="small fw-medium text-dark" th:text="${p.assignedDoctor.fullName}">Dr. Marcus Vance</span>
+                  </div>
+                  <span th:unless="${p.assignedDoctor != null}" class="text-muted small">Unassigned</span>
+                </td>
+                <td class="small text-muted" style="max-width: 180px;">
+                  <span class="text-truncate d-inline-block" style="max-width: 170px;" th:text="${p.chronicConditions != null ? p.chronicConditions : 'None'}">Hypertension</span>
+                </td>
+                <td class="pe-3 text-end">
+                  <span class="badge badge-soft-green">
+                    <i class="bi bi-broadcast me-1"></i> Transmitting
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function filterPatients() {
+  const query = document.getElementById('patientTableSearch').value.toLowerCase();
+  const rows = document.querySelectorAll('#patientsTable tbody tr');
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

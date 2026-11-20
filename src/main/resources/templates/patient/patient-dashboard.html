@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Health Dashboard – MediAI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('dashboard')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Welcome Header -->
+      <div class="mediai-card p-4 mb-4 bg-white border-0 shadow-sm" style="border-left: 5px solid #14B8A6 !important;">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <h3 class="fw-extrabold text-dark mb-0">
+                Welcome back, <span th:text="${patient.fullName}">Alexander</span>!
+              </h3>
+              <span class="badge badge-soft-green">
+                <i class="bi bi-shield-check me-1"></i> Patient Protected
+              </span>
+            </div>
+            <p class="text-muted small mb-0 mt-1">
+              MediAI Health Record ID: <strong class="text-dark" th:text="${'#EHR-00' + patient.id}">#EHR-001</strong> &bull;
+              Blood Type: <span class="badge badge-soft-amber" th:text="${patient.bloodGroup != null ? patient.bloodGroup : 'O+'}">O+</span> &bull;
+              Continuous Telemetry: <strong class="text-success">Active</strong>
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <a th:href="@{/patient/book-appointment}" class="btn btn-primary-medical btn-sm">
+              <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+            </a>
+            <a th:href="@{/patient/diagnosis}" class="btn btn-teal-medical btn-sm text-white">
+              <i class="bi bi-cpu me-1"></i> AI Symptom Check
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Telemetry Live Vitals Cards -->
+      <div class="row g-3 mb-4">
+        <!-- Heart Rate -->
+        <div class="col-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Heart Rate</span>
+              <i class="bi bi-heart-pulse-fill text-danger fs-5"></i>
+            </div>
+            <div class="d-flex align-items-baseline gap-1">
+              <span class="h2 fw-extrabold text-dark mb-0" th:text="${latestVital != null ? latestVital.heartRate : 74}">74</span>
+              <small class="text-muted fw-bold">BPM</small>
+            </div>
+            <div class="mt-2">
+              <span class="badge badge-soft-green" style="font-size: 0.65rem;">Resting Normal (60-100)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blood Pressure -->
+        <div class="col-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Blood Pressure</span>
+              <i class="bi bi-activity text-primary fs-5"></i>
+            </div>
+            <div class="d-flex align-items-baseline gap-1">
+              <span class="h2 fw-extrabold text-dark mb-0" th:text="${latestVital != null ? (latestVital.bloodPressureSystolic + '/' + latestVital.bloodPressureDiastolic) : '122/80'}">122/80</span>
+              <small class="text-muted fw-bold">mmHg</small>
+            </div>
+            <div class="mt-2">
+              <span class="badge badge-soft-blue" style="font-size: 0.65rem;">Optimal Systolic</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Oxygen Saturation -->
+        <div class="col-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.7rem;">SpO2 Oxygen</span>
+              <i class="bi bi-lungs-fill text-teal fs-5" style="color: #14B8A6;"></i>
+            </div>
+            <div class="d-flex align-items-baseline gap-1">
+              <span class="h2 fw-extrabold text-dark mb-0" th:text="${latestVital != null ? (latestVital.oxygenSaturation + '%') : '98%'}">98%</span>
+              <small class="text-muted fw-bold">SpO2</small>
+            </div>
+            <div class="mt-2">
+              <span class="badge badge-soft-green" style="font-size: 0.65rem;">Adequate Oxygenation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="col-6 col-lg-3">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Body Temperature</span>
+              <i class="bi bi-thermometer-half text-warning fs-5"></i>
+            </div>
+            <div class="d-flex align-items-baseline gap-1">
+              <span class="h2 fw-extrabold text-dark mb-0" th:text="${latestVital != null ? (latestVital.bodyTemperature + '°C') : '36.8°C'}">36.8°C</span>
+              <small class="text-muted fw-bold">Celsius</small>
+            </div>
+            <div class="mt-2">
+              <span class="badge badge-soft-blue" style="font-size: 0.65rem;">Normothermic Range</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Columns: Left (Appointments & Doctor) + Right (AI Assessments & Care Plans) -->
+      <div class="row g-4">
+        <!-- Left Column: Upcoming Appointments & Doctor Card -->
+        <div class="col-lg-7">
+          <!-- Upcoming Appointments -->
+          <div class="mediai-card mb-4">
+            <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold text-dark mb-0"><i class="bi bi-calendar-check me-2 text-primary"></i>My Scheduled Consultations</h5>
+              <a th:href="@{/patient/appointments}" class="small text-decoration-none fw-bold">View All &rarr;</a>
+            </div>
+
+            <div class="p-3">
+              <div th:if="${#lists.isEmpty(appointments)}" class="text-center py-4 text-muted">
+                <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+                You have no upcoming consultations scheduled.
+                <div class="mt-2">
+                  <a th:href="@{/patient/book-appointment}" class="btn btn-outline-medical btn-sm">Schedule Now</a>
+                </div>
+              </div>
+
+              <div th:unless="${#lists.isEmpty(appointments)}" class="d-flex flex-column gap-3">
+                <div th:each="apt : ${appointments}" class="p-3 rounded-3 border bg-light d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
+                  <div class="d-flex align-items-center gap-3">
+                    <img th:src="${apt.doctor.profileImageUrl}" alt="Doctor" class="rounded-circle border d-none d-sm-block" style="width: 2.75rem; height: 2.75rem; object-fit: cover;">
+                    <div>
+                      <div class="fw-bold text-dark" th:text="${apt.doctor.fullName}">Dr. Marcus Vance</div>
+                      <div class="text-muted small">
+                        <span th:text="${apt.doctor.specialization}">Cardiology</span> &bull;
+                        <span class="badge bg-white text-dark border" th:text="${apt.doctor.roomNumber}">Room 304</span>
+                      </div>
+                      <div class="small text-muted mt-1">
+                        <i class="bi bi-calendar3 me-1 text-primary"></i>
+                        <span th:text="${#temporals.format(apt.appointmentDate, 'EEE, dd MMM yyyy')}">Mon, 22 Nov 2026</span> at
+                        <strong class="text-dark" th:text="${apt.appointmentTime}">10:00 AM</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span th:if="${apt.status.name() == 'APPROVED'}" class="badge badge-soft-blue mb-1 d-block text-center">Confirmed</span>
+                    <span th:if="${apt.status.name() == 'PENDING'}" class="badge badge-soft-amber mb-1 d-block text-center">Pending Doctor</span>
+                    <span th:if="${apt.status.name() == 'COMPLETED'}" class="badge badge-soft-green mb-1 d-block text-center">Completed</span>
+                    <span th:if="${apt.status.name() == 'CANCELLED'}" class="badge bg-danger-subtle text-danger mb-1 d-block text-center">Cancelled</span>
+
+                    <span th:if="${apt.meetingType == 'telehealth' or apt.meetingType == 'TELEHEALTH'}" class="badge badge-soft-teal small">
+                      <i class="bi bi-camera-video me-1"></i> Telehealth
+                    </span>
+                    <span th:unless="${apt.meetingType == 'telehealth' or apt.meetingType == 'TELEHEALTH'}" class="badge bg-light text-dark border small">
+                      <i class="bi bi-geo-alt me-1"></i> In-Clinic
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assigned Primary Physician -->
+          <div class="mediai-card p-4" th:if="${assignedDoctor != null}">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-badge me-2 text-teal" style="color: #14B8A6;"></i>My Assigned Primary Physician</h5>
+            <div class="d-flex align-items-center gap-3">
+              <img th:src="${assignedDoctor.profileImageUrl}" alt="Doctor" class="rounded-circle border" style="width: 3.5rem; height: 3.5rem; object-fit: cover;">
+              <div class="flex-grow-1">
+                <h6 class="fw-bold text-dark mb-0" th:text="${assignedDoctor.fullName}">Dr. Marcus Vance</h6>
+                <div class="text-muted small" th:text="${assignedDoctor.specialization + ' &bull; ' + assignedDoctor.qualification}">Cardiology &bull; MD, FACC</div>
+                <div class="small text-muted mt-1">
+                  <i class="bi bi-clock me-1 text-primary"></i> <span th:text="${assignedDoctor.availableDays}">Mon - Fri (09:00 - 17:00)</span>
+                </div>
+              </div>
+              <div>
+                <a th:href="@{'/patient/book-appointment?doctorId=' + ${assignedDoctor.id}}" class="btn btn-outline-medical btn-sm">
+                  <i class="bi bi-calendar-plus me-1"></i> Book Slot
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: AI Triage History & Authorized Care Plans -->
+        <div class="col-lg-5">
+          <!-- AI Diagnostic History -->
+          <div class="mediai-card mb-4">
+            <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold text-dark mb-0"><i class="bi bi-cpu me-2 text-primary"></i>AI Preliminary Assessments</h5>
+              <a th:href="@{/patient/diagnosis}" class="small text-decoration-none fw-bold">New Assessment &rarr;</a>
+            </div>
+
+            <div class="p-3 d-flex flex-column gap-3">
+              <div th:if="${#lists.isEmpty(assessments)}" class="text-center py-4 text-muted">
+                <i class="bi bi-activity fs-2 d-block mb-2"></i>
+                No symptom assessments run yet.
+              </div>
+
+              <div th:each="asst : ${assessments}" class="p-3 rounded-3 border bg-light">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <span class="badge" th:classappend="${asst.urgencyLevel == 'EMERGENCY' ? 'bg-danger text-white' : (asst.urgencyLevel == 'URGENT' ? 'bg-warning text-dark' : 'badge-soft-blue')}" th:text="${asst.urgencyLevel}">URGENT</span>
+                  <span class="badge badge-soft-teal" th:text="${asst.confidenceScore != null ? (asst.confidenceScore * 100) + '% Confidence' : 'AI'}">88%</span>
+                </div>
+                <div class="fw-bold text-dark mb-1" th:text="${asst.primaryCondition}">Angina Pectoris</div>
+                <p class="small text-muted mb-2" th:text="${#strings.abbreviate(asst.reasoning, 100)}">Reasoning...</p>
+
+                <div class="small">
+                  <span th:if="${asst.reviewedByDoctor}" class="text-success fw-bold">
+                    <i class="bi bi-check-circle-fill me-1"></i> Validated by Physician
+                  </span>
+                  <span th:unless="${asst.reviewedByDoctor}" class="text-muted">
+                    <i class="bi bi-clock me-1"></i> Awaiting Doctor Review
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Authorized Care Plans -->
+          <div class="mediai-card p-4" th:if="${not #lists.isEmpty(carePlans)}">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-stars me-2 text-warning"></i>Active Care Protocols</h5>
+            <div th:each="plan : ${carePlans}" class="p-3 rounded-3 border bg-light mb-2">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <strong class="text-dark small" th:text="${plan.title}">Care Protocol</strong>
+                <span th:if="${plan.approvedByDoctor}" class="badge badge-soft-green">Authorized</span>
+                <span th:unless="${plan.approvedByDoctor}" class="badge badge-soft-amber">Pending Sign-off</span>
+              </div>
+              <p class="small text-muted mb-1" th:text="${plan.lifestyleModifications}">DASH dietary guidelines, sodium restriction.</p>
+              <div class="small text-primary fw-medium" th:if="${plan.doctorNotes != null}">
+                <i class="bi bi-pen me-1"></i> Orders: <span th:text="${plan.doctorNotes}">Notes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

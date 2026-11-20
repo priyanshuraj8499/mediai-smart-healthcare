@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Appointments – Doctor Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('appointments')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}" class="text-decoration-none">Doctor Portal</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Schedule &amp; Appointments</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">Patient Consultation Schedule</h2>
+          <p class="text-muted small mb-0">Manage booking approvals, telemedicine sessions, clinical notes, and post-visit completion.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Appointments List Card -->
+      <div class="mediai-card overflow-hidden">
+        <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold text-dark mb-0">Scheduled Consultations (<span th:text="${appointments.size()}">0</span>)</h5>
+          <span class="badge badge-soft-blue">Double-Booking Guard Active</span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(appointments)}" class="text-center py-5 text-muted">
+          <i class="bi bi-calendar2-check fs-1 text-primary mb-2 d-block"></i>
+          <h6 class="fw-bold">No appointments found.</h6>
+          <p class="small text-muted mb-0">Patients booking slots with you will appear here for review.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(appointments)}" class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-uppercase small text-muted" style="font-size: 0.75rem;">
+              <tr>
+                <th class="ps-3">ID</th>
+                <th>Patient Details</th>
+                <th>Date &amp; Time</th>
+                <th>Mode</th>
+                <th>Patient Symptoms</th>
+                <th>Status</th>
+                <th>Physician Notes</th>
+                <th class="pe-3 text-end">Action / Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="apt : ${appointments}">
+                <td class="ps-3 fw-bold text-dark" th:text="${'#APT-' + apt.id}">#APT-1</td>
+                <td>
+                  <div class="fw-bold text-dark" th:text="${apt.patient.fullName}">Alexander Hayes</div>
+                  <small class="text-muted" th:text="${apt.patient.gender + ', ' + apt.patient.bloodGroup + ', ' + apt.patient.emergencyContactPhone}">Male, O+</small>
+                </td>
+                <td>
+                  <div class="fw-bold text-dark small" th:text="${#temporals.format(apt.appointmentDate, 'dd MMM yyyy')}">22 Nov 2026</div>
+                  <small class="text-muted"><i class="bi bi-clock me-1"></i><span th:text="${apt.appointmentTime}">10:00</span></small>
+                </td>
+                <td>
+                  <span th:if="${apt.meetingType == 'telehealth' or apt.meetingType == 'TELEHEALTH'}" class="badge badge-soft-teal">
+                    <i class="bi bi-camera-video me-1"></i> Telehealth
+                  </span>
+                  <span th:unless="${apt.meetingType == 'telehealth' or apt.meetingType == 'TELEHEALTH'}" class="badge bg-light text-dark border">
+                    <i class="bi bi-building me-1"></i> In-Person
+                  </span>
+                </td>
+                <td class="small text-muted" style="max-width: 180px;">
+                  <span class="text-truncate d-inline-block" style="max-width: 170px;" th:text="${apt.symptoms != null ? apt.symptoms : 'Routine visit'}">Chest pain on exertion</span>
+                </td>
+                <td>
+                  <span th:if="${apt.status.name() == 'APPROVED'}" class="badge badge-soft-blue">Confirmed</span>
+                  <span th:if="${apt.status.name() == 'PENDING'}" class="badge badge-soft-amber">Pending Approval</span>
+                  <span th:if="${apt.status.name() == 'COMPLETED'}" class="badge badge-soft-green">Completed</span>
+                  <span th:if="${apt.status.name() == 'CANCELLED'}" class="badge bg-danger-subtle text-danger">Cancelled</span>
+                </td>
+                <td class="small" style="max-width: 160px;">
+                  <span class="text-muted" th:text="${apt.doctorNotes != null && !apt.doctorNotes.isEmpty() ? apt.doctorNotes : 'None logged yet.'}">Notes</span>
+                </td>
+                <td class="pe-3 text-end">
+                  <div class="d-inline-flex gap-1">
+                    <!-- Approve Button -->
+                    <form th:if="${apt.status.name() == 'PENDING'}" th:action="@{'/doctor/appointments/' + ${apt.id} + '/status'}" method="post" class="d-inline">
+                      <input type="hidden" name="status" value="APPROVED">
+                      <button type="submit" class="btn btn-sm btn-outline-primary py-1 px-2" title="Approve">
+                        <i class="bi bi-check-lg me-1"></i> Confirm
+                      </button>
+                    </form>
+                    <!-- Complete Button -->
+                    <form th:if="${apt.status.name() == 'APPROVED'}" th:action="@{'/doctor/appointments/' + ${apt.id} + '/status'}" method="post" class="d-inline">
+                      <input type="hidden" name="status" value="COMPLETED">
+                      <button type="submit" class="btn btn-sm btn-outline-success py-1 px-2" title="Complete">
+                        <i class="bi bi-check2-circle me-1"></i> Done
+                      </button>
+                    </form>
+                    <!-- Cancel Button -->
+                    <form th:if="${apt.status.name() == 'PENDING' or apt.status.name() == 'APPROVED'}" th:action="@{'/doctor/appointments/' + ${apt.id} + '/status'}" method="post" class="d-inline">
+                      <input type="hidden" name="status" value="CANCELLED">
+                      <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2" title="Cancel">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

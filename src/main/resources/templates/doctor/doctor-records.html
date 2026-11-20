@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Reports &amp; Patient Records – Doctor Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('records')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}" class="text-decoration-none">Doctor Portal</a></li>
+              <li class="breadcrumb-item active" aria-current="page">AI Reports &amp; Records</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">AI Diagnostic Assessments &amp; Medical Records</h2>
+          <p class="text-muted small mb-0">Clinical validation suite for preliminary AI triage evaluations, differential diagnostics, and recommendations.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Regulatory Medical Disclaimer Banner -->
+      <div class="alert alert-info border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-3">
+        <i class="bi bi-shield-exclamation fs-3 text-primary"></i>
+        <div class="small">
+          <strong>Clinical Decision Support Protocol:</strong> MediAI machine learning outputs serve strictly as preliminary diagnostic aids and educational suggestions. Final clinical decisions, prescriptions, and treatment plans remain under the sole professional authority of the attending licensed physician.
+        </div>
+      </div>
+
+      <!-- AI Assessments List -->
+      <div class="d-flex flex-column gap-4">
+        <div th:each="asst : ${assessments}" class="mediai-card p-4">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3 pb-3 border-bottom">
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" th:classappend="${asst.urgencyLevel == 'EMERGENCY' ? 'bg-danger text-white' : (asst.urgencyLevel == 'URGENT' ? 'bg-warning text-dark' : 'badge-soft-blue')}" th:text="${asst.urgencyLevel}">URGENT</span>
+                <h5 class="fw-bold text-dark mb-0" th:text="${asst.primaryCondition}">Possible Condition</h5>
+                <span class="badge badge-soft-teal" th:text="${asst.confidenceScore != null ? (asst.confidenceScore * 100) + '% Confidence' : 'AI Assessment'}">85%</span>
+              </div>
+              <small class="text-muted">
+                Patient: <strong class="text-dark" th:text="${asst.patient != null ? asst.patient.fullName : 'Confidential'}">Alexander Hayes</strong> &bull;
+                Logged: <span th:text="${#temporals.format(asst.createdAt, 'dd MMM yyyy, HH:mm')}">20 Nov 2026, 10:30</span>
+              </small>
+            </div>
+            <div>
+              <span th:if="${asst.reviewedByDoctor}" class="badge badge-soft-green">
+                <i class="bi bi-check2-all me-1"></i> Physician Validated
+              </span>
+              <span th:unless="${asst.reviewedByDoctor}" class="badge badge-soft-amber">
+                <i class="bi bi-clock me-1"></i> Pending Physician Review
+              </span>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <h6 class="fw-bold text-dark mb-2 small text-uppercase"><i class="bi bi-chat-square-text me-1 text-primary"></i> Reported Symptoms &amp; Duration</h6>
+                <p class="small text-muted mb-0" th:text="${asst.reportedSymptoms}">Chest tightness radiating to left shoulder on physical exertion.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <h6 class="fw-bold text-dark mb-2 small text-uppercase"><i class="bi bi-cpu me-1 text-teal"></i> Clinical Reasoning Engine</h6>
+                <p class="small text-muted mb-0" th:text="${asst.reasoning}">Symptom constellation correlates with exertion-induced myocardial oxygen mismatch.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-3 mb-3" style="background-color: #F0F7FF; border: 1px solid #BFDBFE;">
+            <h6 class="fw-bold text-primary mb-1 small text-uppercase"><i class="bi bi-card-checklist me-1"></i> Recommended Next Steps</h6>
+            <p class="small text-dark mb-0" th:text="${asst.suggestedActions}">Immediate 12-lead resting and stress ECG, serum Troponin I/T assay, lipid profile.</p>
+          </div>
+
+          <!-- Doctor Review Form / Display -->
+          <div th:if="${asst.reviewedByDoctor}" class="p-3 bg-white rounded-3 border">
+            <div class="small fw-bold text-success mb-1">
+              <i class="bi bi-check-circle-fill me-1"></i> Attending Physician Clinical Verdict:
+            </div>
+            <p class="small text-muted mb-0" th:text="${asst.doctorNotes}">Notes</p>
+          </div>
+
+          <div th:unless="${asst.reviewedByDoctor}" class="pt-2">
+            <form th:action="@{'/doctor/assessments/' + ${asst.id} + '/review'}" method="post">
+              <label class="form-label small fw-bold text-dark mb-1">Add Physician Review &amp; Sign-off:</label>
+              <div class="input-group">
+                <input type="text" name="feedback" class="form-control" placeholder="Enter clinical assessment, validation remarks, or orders..." required>
+                <button class="btn btn-primary-medical" type="submit">
+                  <i class="bi bi-pen me-1"></i> Sign Off Assessment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

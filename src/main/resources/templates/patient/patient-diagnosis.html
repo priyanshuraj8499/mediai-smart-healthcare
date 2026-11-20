@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Symptom Assessment &amp; Triage – MediAI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('diagnosis')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/patient/dashboard}" class="text-decoration-none">Patient Portal</a></li>
+              <li class="breadcrumb-item active" aria-current="page">AI Symptom Assessment</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">AI-Powered Symptom Assessment &amp; Triage</h2>
+          <p class="text-muted small mb-0">Clinical knowledge engine with dual-tier Gemini AI and expert diagnostic rule fallback.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Prominent Medical Disclaimer Banner -->
+      <div class="alert alert-warning border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-3">
+        <i class="bi bi-shield-exclamation fs-2 text-warning"></i>
+        <div class="small text-dark">
+          <strong>Important Clinical &amp; Legal Disclaimer:</strong>
+          MediAI Preliminary Symptom Assessment does <em>not</em> constitute a formal clinical diagnosis, medical prescription, or emergency triage service. Never delay seeking urgent professional medical attention. If you experience severe chest pain, shortness of breath, sudden numbness, or life-threatening symptoms, immediately contact emergency services (<strong>911 / 112</strong>) or proceed to the nearest emergency room.
+        </div>
+      </div>
+
+      <!-- Highlight newly generated assessment if present in flash -->
+      <div th:if="${newAssessment != null}" class="mediai-card p-4 mb-4 border-2 shadow-sm" style="border-color: #2563EB !important; background-color: #F8FAFC;">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <span class="badge" th:classappend="${newAssessment.urgencyLevel == 'EMERGENCY' ? 'bg-danger text-white' : (newAssessment.urgencyLevel == 'URGENT' ? 'bg-warning text-dark' : 'badge-soft-blue')}" th:text="${newAssessment.urgencyLevel}">URGENT</span>
+            <span class="badge badge-soft-teal ms-2" th:text="${newAssessment.confidenceScore != null ? (newAssessment.confidenceScore * 100) + '% Confidence Score' : 'Differential Assessment'}">88% Confidence</span>
+            <h3 class="fw-bold text-dark mt-2 mb-0" th:text="${newAssessment.primaryCondition}">Angina Pectoris / Coronary Ischemia</h3>
+          </div>
+          <span class="badge badge-soft-blue">Assessment #<span th:text="${newAssessment.id}">1</span></span>
+        </div>
+
+        <div class="p-3 bg-white rounded-3 border mb-3">
+          <h6 class="fw-bold text-primary small text-uppercase mb-1"><i class="bi bi-cpu me-1"></i> Diagnostic Reasoning Engine</h6>
+          <p class="text-dark small mb-0" th:text="${newAssessment.reasoning}">Reasoning analysis...</p>
+        </div>
+
+        <div class="p-3 rounded-3 mb-3" style="background-color: #EFF6FF; border: 1px solid #BFDBFE;">
+          <h6 class="fw-bold text-primary small text-uppercase mb-1"><i class="bi bi-card-checklist me-1"></i> Recommended Next Clinical Actions</h6>
+          <p class="text-dark small mb-0" th:text="${newAssessment.suggestedActions}">Next steps...</p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 pt-2">
+          <a th:href="@{/patient/book-appointment}" class="btn btn-primary-medical btn-sm">
+            <i class="bi bi-calendar-plus me-1"></i> Schedule Physician Review
+          </a>
+          <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> Print Assessment
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Left Column: Assessment Input Form -->
+        <div class="col-lg-6">
+          <div class="mediai-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-dark mb-0"><i class="bi bi-clipboard2-pulse me-2 text-primary"></i>New Symptom Intake</h5>
+              <span class="badge badge-soft-blue">Secure Intake Form</span>
+            </div>
+
+            <!-- Quick Demo Symptom Presets -->
+            <div class="mb-4 p-3 bg-light rounded-3 border">
+              <label class="form-label small fw-bold text-muted text-uppercase d-block mb-2">
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Instant Demo Presets (Click to Test):
+              </label>
+              <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-white border shadow-sm" onclick="loadPreset('angina')">
+                  🫀 Chest Tightness / Angina
+                </button>
+                <button type="button" class="btn btn-sm btn-white border shadow-sm" onclick="loadPreset('migraine')">
+                  🧠 Unilateral Migraine &amp; Aura
+                </button>
+                <button type="button" class="btn btn-sm btn-white border shadow-sm" onclick="loadPreset('bronchitis')">
+                  🫁 Productive Cough &amp; Wheeze
+                </button>
+              </div>
+            </div>
+
+            <form th:action="@{/patient/diagnosis}" th:object="${diagnosisRequest}" method="post">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-dark">Patient Name <span class="text-danger">*</span></label>
+                  <input type="text" th:field="*{patientName}" class="form-control" required id="diagName">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small fw-bold text-dark">Age <span class="text-danger">*</span></label>
+                  <input type="number" th:field="*{age}" class="form-control" min="1" max="120" required id="diagAge">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small fw-bold text-dark">Gender <span class="text-danger">*</span></label>
+                  <select th:field="*{gender}" class="form-select" id="diagGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label small fw-bold text-dark">Presenting Symptoms <span class="text-danger">*</span></label>
+                  <textarea th:field="*{symptoms}" class="form-control" rows="3" placeholder="Describe symptoms in detail (e.g. pressure in chest, radiating ache to left arm upon physical exertion)..." required id="diagSymptoms"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-dark">Symptom Duration <span class="text-danger">*</span></label>
+                  <input type="text" th:field="*{symptomDuration}" class="form-control" placeholder="e.g. 3 days, intermittent" required id="diagDuration">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-dark">Existing Conditions</label>
+                  <input type="text" th:field="*{existingConditions}" class="form-control" placeholder="e.g. Hypertension, Diabetes" id="diagConditions">
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label small fw-bold text-dark">Medical History &amp; Medications</label>
+                  <textarea th:field="*{medicalHistory}" class="form-control" rows="2" placeholder="Relevant surgical history, current prescription medications..." id="diagHistory"></textarea>
+                </div>
+
+                <div class="col-md-12 text-end pt-2">
+                  <button type="submit" class="btn btn-primary-medical px-4 py-2">
+                    <i class="bi bi-cpu me-2"></i> Run AI Clinical Assessment
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Past Assessments History -->
+        <div class="col-lg-6">
+          <div class="mediai-card h-100">
+            <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history me-2 text-teal" style="color: #14B8A6;"></i>Historical AI Assessments</h5>
+              <span class="badge badge-soft-blue" th:text="${assessments.size() + ' Entries'}">3 Entries</span>
+            </div>
+
+            <div class="p-3 d-flex flex-column gap-3">
+              <div th:if="${#lists.isEmpty(assessments)}" class="text-center py-5 text-muted">
+                <i class="bi bi-cpu fs-1 text-primary mb-2 d-block"></i>
+                <h6 class="fw-bold">No previous assessments on file.</h6>
+                <p class="small text-muted mb-0">Fill out the intake form on the left or use a preset to run your first evaluation.</p>
+              </div>
+
+              <div th:each="asst : ${assessments}" class="p-3 rounded-3 border bg-light">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <span class="badge" th:classappend="${asst.urgencyLevel == 'EMERGENCY' ? 'bg-danger text-white' : (asst.urgencyLevel == 'URGENT' ? 'bg-warning text-dark' : 'badge-soft-blue')}" th:text="${asst.urgencyLevel}">URGENT</span>
+                    <span class="badge badge-soft-teal ms-1" th:text="${asst.confidenceScore != null ? (asst.confidenceScore * 100) + '% Confidence' : 'AI Triaged'}">88%</span>
+                  </div>
+                  <small class="text-muted" th:text="${#temporals.format(asst.createdAt, 'dd MMM yyyy, HH:mm')}">20 Nov 2026, 10:30</small>
+                </div>
+
+                <h6 class="fw-bold text-dark mb-1" th:text="${asst.primaryCondition}">Angina Pectoris / Coronary Ischemia</h6>
+                <p class="small text-muted mb-2" th:text="${#strings.abbreviate(asst.reasoning, 140)}">Clinical reasoning...</p>
+
+                <div class="small p-2 bg-white rounded border mb-2">
+                  <strong class="text-primary d-block">Guidance:</strong>
+                  <span class="text-muted" th:text="${#strings.abbreviate(asst.suggestedActions, 130)}">Next steps...</span>
+                </div>
+
+                <div class="small">
+                  <span th:if="${asst.reviewedByDoctor}" class="text-success fw-bold">
+                    <i class="bi bi-check-circle-fill me-1"></i> Physician Review:
+                    <span class="text-muted fw-normal" th:text="${asst.doctorNotes}">Notes</span>
+                  </span>
+                  <span th:unless="${asst.reviewedByDoctor}" class="text-muted">
+                    <i class="bi bi-clock me-1"></i> Pending Attending Physician Validation
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function loadPreset(type) {
+  if (type === 'angina') {
+    document.getElementById('diagSymptoms').value = 'Substernal chest tightness radiating to the left arm and jaw, occurring especially during brisk walking or climbing stairs, relieved by rest.';
+    document.getElementById('diagDuration').value = '4 days, intermittent exertion-triggered episodes';
+    document.getElementById('diagConditions').value = 'Essential Hypertension, Hyperlipidemia';
+    document.getElementById('diagHistory').value = 'Family history of coronary artery disease; non-smoker.';
+  } else if (type === 'migraine') {
+    document.getElementById('diagSymptoms').value = 'Throbbing unilateral headache on right temple accompanied by visual photophobia, sensitivity to sound, nausea, and flashing zig-zag visual aura.';
+    document.getElementById('diagDuration').value = '8 hours, acute onset this morning';
+    document.getElementById('diagConditions').value = 'Chronic episodic tension headaches';
+    document.getElementById('diagHistory').value = 'No prior head trauma; oral contraceptives.';
+  } else if (type === 'bronchitis') {
+    document.getElementById('diagSymptoms').value = 'Persistent productive cough with yellowish sputum, low-grade fever, chest discomfort on deep inspiration, mild expiratory wheezing.';
+    document.getElementById('diagDuration').value = '6 days following common cold';
+    document.getElementById('diagConditions').value = 'Childhood mild asthma';
+    document.getElementById('diagHistory').value = 'Recent viral upper respiratory tract infection last week.';
+  }
+}
+</script>
+</body>
+</html>

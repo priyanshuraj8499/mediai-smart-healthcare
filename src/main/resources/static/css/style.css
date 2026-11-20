@@ -1,0 +1,213 @@
+/* ===================================================================
+   MediAI – Smart Healthcare Platform Design System
+   Exact Theme:
+   Primary Medical Blue: #2563EB
+   Secondary Teal: #14B8A6
+   Background White: #FFFFFF
+   Soft Blue Background: #F0F7FF
+   Soft Green Accent: #22C55E
+   Dark Navy Text: #172554
+   Secondary Text: #64748B
+   Border: #E2E8F0
+=================================================================== */
+
+:root {
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --secondary: #14B8A6;
+  --secondary-hover: #0D9488;
+  --bg-white: #FFFFFF;
+  --bg-soft-blue: #F0F7FF;
+  --accent-green: #22C55E;
+  --text-navy: #172554;
+  --text-slate: #64748B;
+  --border-subtle: #E2E8F0;
+  --card-radius: 1rem;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background-color: var(--bg-white);
+  color: var(--text-navy);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-navy);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Cards */
+.mediai-card {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s ease-in-out;
+}
+
+.mediai-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom Buttons */
+.btn-primary-medical {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-medical:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-secondary-teal {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-teal:hover {
+  background-color: var(--secondary-hover);
+  border-color: var(--secondary-hover);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25);
+}
+
+.btn-outline-medical {
+  background-color: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-slate);
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-medical:hover {
+  background-color: var(--bg-soft-blue);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Soft Pill Badges */
+.badge-soft-blue {
+  background-color: #EFF6FF;
+  color: var(--primary);
+  border: 1px solid #DBEAFE;
+  font-weight: 600;
+}
+
+.badge-soft-teal {
+  background-color: #F0FDFA;
+  color: #0F766E;
+  border: 1px solid #CCFBF1;
+  font-weight: 600;
+}
+
+.badge-soft-green {
+  background-color: #F0FDF4;
+  color: #166534;
+  border: 1px solid #DCFCE7;
+  font-weight: 600;
+}
+
+.badge-soft-rose {
+  background-color: #FFF1F2;
+  color: #9F1239;
+  border: 1px solid #FFE4E6;
+  font-weight: 600;
+}
+
+.badge-soft-amber {
+  background-color: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FEF3C7;
+  font-weight: 600;
+}
+
+/* Animated Pulse for Real-time vitals */
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.animate-heart {
+  animation: heartPulse 1.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* System Demo Bar */
+.demo-top-bar {
+  background: linear-gradient(90deg, #F0F7FF 0%, #FFFFFF 50%, #F0FDFA 100%);
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 0.75rem;
+  color: var(--text-slate);
+  padding: 0.35rem 1rem;
+}
+
+/* Sidebar Styling */
+.mediai-sidebar {
+  min-height: calc(100vh - 4.5rem);
+  background-color: var(--bg-white);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-slate);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background-color: var(--bg-soft-blue);
+  color: var(--primary);
+}
+
+.sidebar-link.active {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* Table styling */
+.mediai-table th {
+  background-color: #F8FAFC;
+  color: var(--text-slate);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.75rem 1rem;
+}
+
+.mediai-table td {
+  padding: 0.875rem 1rem;
+  font-size: 0.8125rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #F1F5F9;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assigned Patients – Doctor Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('patients')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}" class="text-decoration-none">Doctor Portal</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Assigned Patients</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">Assigned Patient Panel</h2>
+          <p class="text-muted small mb-0">Comprehensive clinical chart, patient histories, drug sensitivities, and continuous telemetry monitoring.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Patients Grid -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-6 col-lg-4" th:each="p : ${patients}">
+          <div class="mediai-card h-100 p-4 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center"
+                       style="width: 2.75rem; height: 2.75rem; font-size: 1.1rem;"
+                       th:text="${#strings.substring(p.fullName,0,1)}">P</div>
+                  <div>
+                    <h5 class="fw-bold text-dark mb-0" th:text="${p.fullName}">Alexander Hayes</h5>
+                    <span class="badge bg-light text-muted border" th:text="${'Patient ID #' + p.id}">#PAT-1</span>
+                  </div>
+                </div>
+                <span class="badge badge-soft-amber fw-bold" th:text="${p.bloodGroup != null ? p.bloodGroup : 'O+'}">O+</span>
+              </div>
+
+              <div class="p-3 bg-light rounded-3 mb-3 border small">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">Age / Gender:</span>
+                  <span class="fw-bold text-dark" th:text="${(p.gender != null ? p.gender : 'Male') + ', 36 yrs'}">Male, 36 yrs</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">Emergency Phone:</span>
+                  <span class="fw-bold text-dark" th:text="${p.emergencyContactPhone != null ? p.emergencyContactPhone : '+1 555-0192'}">+1 555-0192</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">Known Allergies:</span>
+                  <span class="fw-bold text-danger" th:text="${p.allergies != null && !p.allergies.isEmpty() ? p.allergies : 'No known allergies'}">Penicillin</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">Chronic Illnesses:</span>
+                  <span class="fw-bold text-dark" th:text="${p.chronicConditions != null && !p.chronicConditions.isEmpty() ? p.chronicConditions : 'None'}">Hypertension</span>
+                </div>
+              </div>
+
+              <div class="small text-muted mb-3">
+                <strong class="d-block text-dark mb-1">EHR Medical Summary:</strong>
+                <p class="mb-0" th:text="${p.medicalHistorySummary != null && !p.medicalHistorySummary.isEmpty() ? p.medicalHistorySummary : 'Primary care history under regular cardiac observation.'}">History under regular observation.</p>
+              </div>
+            </div>
+
+            <div class="pt-2 border-top d-flex justify-content-between align-items-center">
+              <span class="badge badge-soft-green">
+                <i class="bi bi-broadcast me-1"></i> Telemetry Active
+              </span>
+              <a th:href="@{/doctor/records}" class="btn btn-outline-medical btn-sm py-1 px-2">
+                <i class="bi bi-journal-medical me-1"></i> View Clinical EHR
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

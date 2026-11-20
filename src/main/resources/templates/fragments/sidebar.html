@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+
+<!-- REUSABLE SIDEBAR FRAGMENT -->
+<div th:fragment="sidebar(activeMenu)" class="mediai-sidebar p-3 d-flex flex-column justify-content-between h-100">
+  <div>
+    <!-- User Badge in Sidebar -->
+    <div class="p-3 mb-3 bg-light rounded-3 border">
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+             style="width: 2.25rem; height: 2.25rem; font-size: 0.85rem;">
+          <span sec:authentication="name" th:text="${#strings.substring(#authentication.name,0,1).toUpperCase()}">U</span>
+        </div>
+        <div class="overflow-hidden">
+          <div class="fw-bold text-dark text-truncate" style="font-size: 0.8rem;" sec:authentication="name">User</div>
+          <div class="text-muted" style="font-size: 0.7rem;">
+            <span class="badge bg-primary-subtle text-primary" sec:authentication="principal.authorities[0]">Role</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN LINKS -->
+    <div sec:authorize="hasRole('ROLE_ADMIN')" class="d-flex flex-column gap-1">
+      <div class="text-uppercase text-muted px-3 pb-1" style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em;">Admin Controls</div>
+      <a th:href="@{/admin/dashboard}" class="sidebar-link" th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
+        <i class="bi bi-speedometer2"></i> Executive Overview
+      </a>
+      <a th:href="@{/admin/doctors}" class="sidebar-link" th:classappend="${activeMenu == 'doctors' ? 'active' : ''}">
+        <i class="bi bi-person-badge"></i> Doctors Directory
+      </a>
+      <a th:href="@{/admin/patients}" class="sidebar-link" th:classappend="${activeMenu == 'patients' ? 'active' : ''}">
+        <i class="bi bi-people"></i> Patients Roster
+      </a>
+      <a th:href="@{/admin/appointments}" class="sidebar-link" th:classappend="${activeMenu == 'appointments' ? 'active' : ''}">
+        <i class="bi bi-calendar2-check"></i> All Appointments
+      </a>
+      <a th:href="@{/admin/departments}" class="sidebar-link" th:classappend="${activeMenu == 'departments' ? 'active' : ''}">
+        <i class="bi bi-diagram-3"></i> Departments
+      </a>
+      <a th:href="@{/admin/resources}" class="sidebar-link" th:classappend="${activeMenu == 'resources' ? 'active' : ''}">
+        <i class="bi bi-hospital"></i> Hospital Resources &amp; Beds
+      </a>
+    </div>
+
+    <!-- DOCTOR LINKS -->
+    <div sec:authorize="hasRole('ROLE_DOCTOR')" class="d-flex flex-column gap-1">
+      <div class="text-uppercase text-muted px-3 pb-1" style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em;">Physician Portal</div>
+      <a th:href="@{/doctor/dashboard}" class="sidebar-link" th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
+        <i class="bi bi-speedometer2"></i> Doctor Dashboard
+      </a>
+      <a th:href="@{/doctor/appointments}" class="sidebar-link" th:classappend="${activeMenu == 'appointments' ? 'active' : ''}">
+        <i class="bi bi-calendar2-week"></i> Schedule &amp; Approvals
+      </a>
+      <a th:href="@{/doctor/patients}" class="sidebar-link" th:classappend="${activeMenu == 'patients' ? 'active' : ''}">
+        <i class="bi bi-person-lines-fill"></i> Assigned Patients
+      </a>
+      <a th:href="@{/doctor/records}" class="sidebar-link" th:classappend="${activeMenu == 'records' ? 'active' : ''}">
+        <i class="bi bi-clipboard2-pulse"></i> AI Reports &amp; Records
+      </a>
+      <a th:href="@{/doctor/treatment-recommendations}" class="sidebar-link" th:classappend="${activeMenu == 'treatments' ? 'active' : ''}">
+        <i class="bi bi-stars"></i> Care Plan Suggestions
+      </a>
+      <a th:href="@{/doctor/profile}" class="sidebar-link" th:classappend="${activeMenu == 'profile' ? 'active' : ''}">
+        <i class="bi bi-person-gear"></i> Profile &amp; Availability
+      </a>
+    </div>
+
+    <!-- PATIENT LINKS -->
+    <div sec:authorize="hasRole('ROLE_PATIENT')" class="d-flex flex-column gap-1">
+      <div class="text-uppercase text-muted px-3 pb-1" style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em;">Patient Portal</div>
+      <a th:href="@{/patient/dashboard}" class="sidebar-link" th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
+        <i class="bi bi-house-heart"></i> Health Overview
+      </a>
+      <a th:href="@{/patient/book-appointment}" class="sidebar-link" th:classappend="${activeMenu == 'book' ? 'active' : ''}">
+        <i class="bi bi-calendar-plus"></i> Book Appointment
+      </a>
+      <a th:href="@{/patient/appointments}" class="sidebar-link" th:classappend="${activeMenu == 'appointments' ? 'active' : ''}">
+        <i class="bi bi-calendar2-check"></i> My Appointments
+      </a>
+      <a th:href="@{/patient/monitoring}" class="sidebar-link" th:classappend="${activeMenu == 'monitoring' ? 'active' : ''}">
+        <i class="bi bi-activity"></i> Live Telemetry
+      </a>
+      <a th:href="@{/patient/diagnosis}" class="sidebar-link" th:classappend="${activeMenu == 'diagnosis' ? 'active' : ''}">
+        <i class="bi bi-cpu"></i> AI Symptom Triage
+      </a>
+      <a th:href="@{/patient/medical-history}" class="sidebar-link" th:classappend="${activeMenu == 'history' ? 'active' : ''}">
+        <i class="bi bi-file-earmark-medical"></i> Medical History
+      </a>
+    </div>
+
+    <!-- Public Shortcut Links -->
+    <hr class="my-3 text-muted" />
+    <div class="d-flex flex-column gap-1">
+      <a th:href="@{/}" class="sidebar-link" style="font-size: 0.75rem;">
+        <i class="bi bi-arrow-left"></i> Public Home
+      </a>
+      <a th:href="@{/doctors}" class="sidebar-link" style="font-size: 0.75rem;">
+        <i class="bi bi-search"></i> Find Specialist
+      </a>
+    </div>
+  </div>
+
+  <!-- Logout in Sidebar Footer -->
+  <div class="pt-3 border-top">
+    <form th:action="@{/logout}" method="post" class="w-100">
+      <button type="submit" class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-box-arrow-right"></i> Sign Out
+      </button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

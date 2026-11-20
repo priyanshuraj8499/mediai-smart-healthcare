@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – MediAI Hospital Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <!-- Chart.js for professional charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar (col-lg-2) -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('dashboard')}"></div>
+    </div>
+
+    <!-- Main Content (col-lg-10) -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Title & Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <h2 class="fw-extrabold text-dark mb-0">Hospital Executive Administration</h2>
+          <p class="text-muted small mb-0">Live census analytics, bed allocation, department statistics, and staff management.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <a th:href="@{/admin/resources}" class="btn btn-outline-medical btn-sm">
+            <i class="bi bi-hospital me-1"></i> Manage Resources
+          </a>
+          <a th:href="@{/admin/appointments}" class="btn btn-primary-medical btn-sm">
+            <i class="bi bi-calendar2-check me-1"></i> All Appointments
+          </a>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- 6 Top KPI Statistics Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Patients</span>
+              <i class="bi bi-people-fill text-primary"></i>
+            </div>
+            <div class="h3 fw-extrabold text-dark mb-0" th:text="${stats.totalPatients}">3</div>
+            <span class="badge badge-soft-green mt-1" style="font-size: 0.65rem;">+12% Census</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Doctors</span>
+              <i class="bi bi-person-badge-fill text-teal" style="color: #14B8A6;"></i>
+            </div>
+            <div class="h3 fw-extrabold text-dark mb-0" th:text="${stats.totalDoctors}">4</div>
+            <span class="badge badge-soft-teal mt-1" style="font-size: 0.65rem;">6 Wings</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Appointments</span>
+              <i class="bi bi-calendar2-check-fill text-info"></i>
+            </div>
+            <div class="h3 fw-extrabold text-dark mb-0" th:text="${stats.totalAppointments}">4</div>
+            <span class="badge badge-soft-blue mt-1" style="font-size: 0.65rem;">All-Time</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Pending</span>
+              <i class="bi bi-clock-history text-warning"></i>
+            </div>
+            <div class="h3 fw-extrabold text-warning mb-0" th:text="${stats.pendingAppointments}">1</div>
+            <span class="badge badge-soft-amber mt-1" style="font-size: 0.65rem;">Action Needed</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Beds</span>
+              <i class="bi bi-hospital-fill text-primary"></i>
+            </div>
+            <div class="h3 fw-extrabold text-dark mb-0">
+              <span th:text="${stats.availableBeds}">72</span> <small class="text-muted fs-6">/ <span th:text="${stats.totalBeds}">270</span></small>
+            </div>
+            <span class="badge badge-soft-blue mt-1" style="font-size: 0.65rem;" th:text="${stats.occupancyRate + '% Occupied'}">74%</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="mediai-card p-3">
+            <div class="d-flex justify-content-between align-items-center text-muted mb-1">
+              <span class="small fw-bold text-uppercase" style="font-size: 0.65rem;">Trauma Cases</span>
+              <i class="bi bi-lightning-charge-fill text-danger"></i>
+            </div>
+            <div class="h3 fw-extrabold text-danger mb-0" th:text="${stats.emergencyCases}">14</div>
+            <span class="badge badge-soft-rose mt-1" style="font-size: 0.65rem;">Level-1 Acute</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS CHARTS (Chart.js) -->
+      <div class="row g-4 mb-4">
+        <!-- Patient Growth Chart -->
+        <div class="col-lg-6">
+          <div class="mediai-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <div>
+                <h6 class="fw-bold text-dark mb-0">Inpatient Admissions vs Discharges</h6>
+                <small class="text-muted">Monthly clinical census telemetry</small>
+              </div>
+              <span class="badge badge-soft-blue">Monthly</span>
+            </div>
+            <div style="height: 250px;">
+              <canvas id="patientGrowthChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Capacity Chart -->
+        <div class="col-lg-6">
+          <div class="mediai-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <div>
+                <h6 class="fw-bold text-dark mb-0">Department Bed Occupancy</h6>
+                <small class="text-muted">Total capacity vs currently admitted</small>
+              </div>
+              <span class="badge badge-soft-teal">Live Census</span>
+            </div>
+            <div style="height: 250px;">
+              <canvas id="deptOccupancyChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOSPITAL RESOURCE PROGRESS & ADJUSTMENT -->
+      <div class="mediai-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div>
+            <h6 class="fw-bold text-dark mb-0">Hospital Critical Resource Allocation</h6>
+            <small class="text-muted">Manage ICU beds, ventilators, and emergency ambulances in real-time</small>
+          </div>
+          <a th:href="@{/admin/resources}" class="btn btn-sm btn-outline-medical">View All Resources</a>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4 col-sm-6" th:each="res : ${resources}">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="small text-dark" th:text="${res.resourceName}">ICU Beds</strong>
+                <span class="badge badge-soft-blue" th:text="${res.category}">ICU</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted mb-2">
+                <span>Available: <strong class="text-dark" th:text="${res.availableCount}">14</strong></span>
+                <span>Total: <strong class="text-dark" th:text="${res.totalCount}">50</strong></span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-primary" role="progressbar" 
+                     th:style="'width: ' + ${(res.occupiedCount * 100) / res.totalCount} + '%;'"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT APPOINTMENTS TABLE -->
+      <div class="mediai-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div>
+            <h6 class="fw-bold text-dark mb-0">Recent Scheduled Consultations</h6>
+            <small class="text-muted">Latest doctor-patient appointments</small>
+          </div>
+          <a th:href="@{/admin/appointments}" class="small text-primary text-decoration-none fw-semibold">View All</a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table mediai-table mb-0">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Physician</th>
+                <th>Department</th>
+                <th>Date &amp; Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="apt : ${appointments}">
+                <td class="fw-bold text-dark" th:text="${apt.patient.fullName}">Alexander Hayes</td>
+                <td th:text="${apt.doctor.fullName}">Dr. Marcus Vance</td>
+                <td><span class="badge badge-soft-blue" th:text="${apt.department.name}">Cardiology</span></td>
+                <td>
+                  <span th:text="${apt.appointmentDate}">2026-11-22</span> at <span th:text="${apt.appointmentTime}">10:30</span>
+                </td>
+                <td>
+                  <span class="badge" 
+                        th:classappend="${apt.status.name() == 'APPROVED' ? 'badge-soft-green' : (apt.status.name() == 'PENDING' ? 'badge-soft-amber' : 'badge-soft-blue')}" 
+                        th:text="${apt.status}">PENDING</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<!-- Render Charts with Chart.js -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1. Patient Growth Chart
+    const ctxGrowth = document.getElementById('patientGrowthChart');
+    if (ctxGrowth) {
+      new Chart(ctxGrowth, {
+        type: 'line',
+        data: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          datasets: [
+            {
+              label: 'Admissions',
+              data: [140, 180, 220, 260, 310, 365],
+              borderColor: '#2563EB',
+              backgroundColor: 'rgba(37, 99, 235, 0.1)',
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: 'Discharges',
+              data: [125, 160, 195, 240, 285, 330],
+              borderColor: '#14B8A6',
+              backgroundColor: 'rgba(20, 184, 166, 0.1)',
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+    }
+
+    // 2. Department Occupancy Chart
+    const ctxDept = document.getElementById('deptOccupancyChart');
+    if (ctxDept) {
+      new Chart(ctxDept, {
+        type: 'bar',
+        data: {
+          labels: ['CARD', 'NEUR', 'EMRG', 'PED', 'ORTH', 'GENM'],
+          datasets: [
+            {
+              label: 'Occupied Beds',
+              data: [38, 29, 51, 18, 32, 41],
+              backgroundColor: '#2563EB',
+              borderRadius: 4
+            },
+            {
+              label: 'Available Beds',
+              data: [7, 6, 9, 12, 8, 9],
+              backgroundColor: '#93C5FD',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { x: { stacked: true }, y: { stacked: true } }
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Care Plan Recommendations – Doctor Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-0 flex-grow-1">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3">
+      <div th:replace="~{fragments/sidebar :: sidebar('treatments')}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9 p-4 p-lg-5">
+      <!-- Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+              <li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}" class="text-decoration-none">Doctor Portal</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Care Plan Suggestions</li>
+            </ol>
+          </nav>
+          <h2 class="fw-extrabold text-dark mb-0">AI-Assisted Treatment &amp; Care Plan Guidelines</h2>
+          <p class="text-muted small mb-0">Evidence-based clinical care protocols, medication references, and physician authorization queue.</p>
+        </div>
+      </div>
+
+      <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+      <!-- Regulatory Notice -->
+      <div class="alert alert-warning border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-3">
+        <i class="bi bi-exclamation-triangle-fill fs-3 text-warning"></i>
+        <div class="small text-dark">
+          <strong>Mandatory Physician Sign-Off Required:</strong> AI recommendations do not automatically execute or prescribe. Clinical care guidelines and medication references become active in patient EHR only upon electronic signature by a credentialed physician.
+        </div>
+      </div>
+
+      <!-- Care Plans Grid -->
+      <div class="d-flex flex-column gap-4">
+        <div th:each="rec : ${recommendations}" class="mediai-card p-4">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3 pb-3 border-bottom">
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge badge-soft-blue" th:text="${'Care Plan #' + rec.id}">#CP-1</span>
+                <h5 class="fw-bold text-dark mb-0" th:text="${rec.title}">Hypertension Grade II Care Protocol</h5>
+              </div>
+              <small class="text-muted">
+                Patient: <strong class="text-dark" th:text="${rec.patient != null ? rec.patient.fullName : 'General Protocol'}">Alexander Hayes</strong> &bull;
+                Target Diagnosis: <span class="fw-bold text-primary" th:text="${rec.diagnosisCondition}">Essential Hypertension</span>
+              </small>
+            </div>
+            <div>
+              <span th:if="${rec.approvedByDoctor}" class="badge badge-soft-green">
+                <i class="bi bi-check-circle-fill me-1"></i> Authorized by Physician
+              </span>
+              <span th:unless="${rec.approvedByDoctor}" class="badge badge-soft-amber">
+                <i class="bi bi-hourglass-split me-1"></i> Awaiting Physician Authorization
+              </span>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <h6 class="fw-bold text-dark mb-2 small text-uppercase"><i class="bi bi-heart-pulse me-1 text-primary"></i> Lifestyle &amp; Dietary Guidelines</h6>
+                <p class="small text-muted mb-0" th:text="${rec.lifestyleModifications}">DASH dietary pattern, sodium intake restriction &lt; 2g/day, 30 min daily aerobic exercise.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <h6 class="fw-bold text-dark mb-2 small text-uppercase"><i class="bi bi-capsule me-1 text-teal"></i> Suggested Educational Therapeutics</h6>
+                <p class="small text-muted mb-0" th:text="${rec.medicationClasses}">ACE inhibitors (e.g. Lisinopril 10mg) or ARBs; baseline electrolytes monitoring.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-3 mb-3" style="background-color: #F0F7FF; border: 1px solid #BFDBFE;">
+            <h6 class="fw-bold text-primary mb-1 small text-uppercase"><i class="bi bi-activity me-1"></i> Continuous Telemetry Follow-Up</h6>
+            <p class="small text-dark mb-0" th:text="${rec.followUpSchedule}">Daily morning blood pressure logging; clinical review in 14 days or earlier if BP exceeds 160/100.</p>
+          </div>
+
+          <!-- Physician Authorization Section -->
+          <div th:if="${rec.approvedByDoctor}" class="p-3 bg-white rounded-3 border">
+            <div class="small fw-bold text-success mb-1">
+              <i class="bi bi-check2-all me-1"></i> Authorized Clinical Order:
+            </div>
+            <p class="small text-muted mb-0" th:text="${rec.doctorNotes}">Notes</p>
+          </div>
+
+          <div th:unless="${rec.approvedByDoctor}" class="pt-2">
+            <form th:action="@{'/doctor/treatment-recommendations/' + ${rec.id} + '/approve'}" method="post">
+              <label class="form-label small fw-bold text-dark mb-1">Physician Clinical Approval &amp; Order Notes:</label>
+              <div class="input-group">
+                <input type="text" name="doctorNotes" class="form-control" placeholder="E.g., Approved protocol. Start with 10mg Lisinopril daily." required>
+                <button class="btn btn-primary-medical" type="submit">
+                  <i class="bi bi-shield-check me-1"></i> Authorize &amp; Sign Protocol
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

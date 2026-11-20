@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features – MediAI Healthcare Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="flex-grow-1">
+  <section class="py-5 bg-gradient" style="background: linear-gradient(180deg, #F0F7FF 0%, #FFFFFF 100%);">
+    <div class="container-fluid px-lg-5 text-center">
+      <span class="badge badge-soft-blue mb-2 text-uppercase fw-bold">Platform Capabilities</span>
+      <h1 class="fw-extrabold text-dark display-5 mb-3">Enterprise Healthcare Features</h1>
+      <p class="lead text-muted small max-w-700 mx-auto">
+        Explore the complete architectural modules powering MediAI, from deep clinical triage to hospital resource management.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-5 bg-white">
+    <div class="container-fluid px-lg-5">
+      <div class="row g-4">
+        <!-- Feature 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-primary text-white d-inline-block mb-3">
+                <i class="bi bi-cpu fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">AI Symptom Assessment</h5>
+              <p class="text-muted small">
+                Structured preliminary triage evaluating duration, symptom intensity, age, and chronic conditions to deliver differential probability scoring and clinical urgency indicators.
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>Differential probability scoring</li>
+                <li>Automatic red-flag emergency detection</li>
+                <li>Zero presumptive drug prescriptions</li>
+                <li>Instant clinical export for doctor review</li>
+              </ul>
+            </div>
+            <a th:href="@{/patient/diagnosis}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Try AI Assessment <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 text-white d-inline-block mb-3" style="background-color: #14B8A6;">
+                <i class="bi bi-activity fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Continuous Telemetry</h5>
+              <p class="text-muted small">
+                High-frequency ambulatory vital signs telemetry tracking Heart Rate (BPM), Blood Pressure (mmHg), Body Temperature (°C), and Oxygen Saturation (SpO2).
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>Vital history with trend charts</li>
+                <li>Multi-patient telemetry filtering</li>
+                <li>Physiological anomaly simulator</li>
+                <li>Borderline &amp; critical threshold alerts</li>
+              </ul>
+            </div>
+            <a th:href="@{/patient/monitoring}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Open Telemetry Suite <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-dark text-white d-inline-block mb-3">
+                <i class="bi bi-calendar2-check fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Smart Appointments</h5>
+              <p class="text-muted small">
+                Automated booking workflow with department filtering, doctor profile inspection, and strict backend double-booking validation.
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>Conflict checks preventing double bookings</li>
+                <li>Filter by Department &amp; Specialty</li>
+                <li>Doctor approval &amp; note management</li>
+                <li>Cancellation &amp; status tracking</li>
+              </ul>
+            </div>
+            <a th:href="@{/patient/book-appointment}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Schedule Visit <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-success text-white d-inline-block mb-3">
+                <i class="bi bi-hospital fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Hospital Bed &amp; Resource Allocation</h5>
+              <p class="text-muted small">
+                Real-time visibility into ICU bed occupancy, inpatient wards, ventilators, and emergency ambulances with dynamic capacity adjustment.
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>ICU &amp; ward bed capacity tracking</li>
+                <li>Emergency triage case counter</li>
+                <li>Departmental utilization metrics</li>
+                <li>Executive administrative control</li>
+              </ul>
+            </div>
+            <a th:href="@{/admin/dashboard}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Hospital Admin <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 text-white d-inline-block mb-3" style="background-color: #0284C7;">
+                <i class="bi bi-stars fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">AI Treatment Suggestions</h5>
+              <p class="text-muted small">
+                Physicians receive AI-suggested educational care plans, lab suggestions, and precautions requiring qualified doctor approval before adoption.
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>Doctor-in-the-loop approval workflow</li>
+                <li>Suggested labs &amp; follow-up timelines</li>
+                <li>Safety precautions &amp; warnings</li>
+                <li>Direct sync with medical history</li>
+              </ul>
+            </div>
+            <a th:href="@{/doctor/treatment-recommendations}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Physician Suggestions <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-secondary text-white d-inline-block mb-3">
+                <i class="bi bi-shield-lock fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Role-Based Security</h5>
+              <p class="text-muted small">
+                Spring Security 6 with BCrypt encryption, custom authorization handlers, role isolation (Admin, Doctor, Patient), and audit trails.
+              </p>
+              <ul class="small text-muted ps-3 mb-0">
+                <li>No self-assigned Admin privileges</li>
+                <li>Protected medical data records</li>
+                <li>Encrypted session credentials</li>
+                <li>HIPAA &amp; GDPR compliance ready</li>
+              </ul>
+            </div>
+            <a th:href="@{/about}" class="btn btn-outline-medical btn-sm mt-4 w-100">
+              Read Security Info <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

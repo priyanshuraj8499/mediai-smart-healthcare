@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<!-- REUSABLE FOOTER FRAGMENT -->
+<footer th:fragment="footer" class="bg-light border-top mt-auto py-5">
+  <div class="container-fluid px-lg-5">
+    <div class="row g-4 mb-4">
+      <!-- Col 1: Brand & Emergency -->
+      <div class="col-lg-4 col-md-6">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="rounded-3 d-flex align-items-center justify-content-center text-white" 
+               style="width: 2.25rem; height: 2.25rem; background: linear-gradient(135deg, #2563EB, #14B8A6);">
+            <i class="bi bi-heart-pulse-fill fs-6 animate-heart"></i>
+          </div>
+          <span class="fw-bold fs-4 text-dark">Medi<span class="text-primary">AI</span></span>
+        </div>
+        <p class="text-muted small mb-3">
+          Smarter Healthcare, Powered by Artificial Intelligence. Transforming patient care, real-time health monitoring, AI clinical assessments, and smart hospital administration.
+        </p>
+        <div class="d-flex flex-column gap-1 text-muted small">
+          <div><i class="bi bi-geo-alt-fill text-primary me-2"></i>450 Innovation Blvd, Seattle Medical Center, WA</div>
+          <div><i class="bi bi-telephone-fill text-primary me-2"></i>Toll-Free Helpline: +1 (800) 555-MEDIAI</div>
+          <div><i class="bi bi-envelope-fill text-primary me-2"></i>contact@mediai.health</div>
+        </div>
+      </div>
+
+      <!-- Col 2: Clinical Solutions -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="text-uppercase fw-bold text-dark small mb-3" style="letter-spacing: 0.05em;">Clinical Modules</h6>
+        <ul class="list-unstyled d-flex flex-column gap-2 small">
+          <li><a th:href="@{/patient/diagnosis}" class="text-muted text-decoration-none hover-primary">AI Triage Assessment</a></li>
+          <li><a th:href="@{/patient/monitoring}" class="text-muted text-decoration-none hover-primary">Patient Telemetry</a></li>
+          <li><a th:href="@{/patient/book-appointment}" class="text-muted text-decoration-none hover-primary">Smart Scheduling</a></li>
+          <li><a th:href="@{/doctors}" class="text-muted text-decoration-none hover-primary">Specialist Directory</a></li>
+          <li><a th:href="@{/features}" class="text-muted text-decoration-none hover-primary">Enterprise Suite</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Role Portals -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <h6 class="text-uppercase fw-bold text-dark small mb-3" style="letter-spacing: 0.05em;">Role Portals</h6>
+        <ul class="list-unstyled d-flex flex-column gap-2 small">
+          <li><a th:href="@{/patient/dashboard}" class="text-muted text-decoration-none hover-primary">Patient Portal</a></li>
+          <li><a th:href="@{/doctor/dashboard}" class="text-muted text-decoration-none hover-primary">Physician Dashboard</a></li>
+          <li><a th:href="@{/admin/dashboard}" class="text-muted text-decoration-none hover-primary">Hospital Administration</a></li>
+          <li><a th:href="@{/login}" class="text-muted text-decoration-none hover-primary">Secure Portal Login</a></li>
+          <li><a th:href="@{/register}" class="text-muted text-decoration-none hover-primary">Patient Registration</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Compliance & Security -->
+      <div class="col-lg-3 col-md-6">
+        <h6 class="text-uppercase fw-bold text-dark small mb-3" style="letter-spacing: 0.05em;">Clinical Standards</h6>
+        <div class="p-3 bg-white rounded-3 border mb-2">
+          <div class="d-flex align-items-center gap-2 text-success fw-bold small">
+            <i class="bi bi-shield-check fs-5"></i> HIPAA &amp; GDPR Compliant
+          </div>
+          <p class="text-muted text-xs mb-0 mt-1" style="font-size: 0.75rem;">
+            End-to-end encrypted medical telemetry &amp; role-based access control.
+          </p>
+        </div>
+        <div class="text-muted text-xs" style="font-size: 0.75rem;">
+          <i class="bi bi-info-circle me-1"></i> Software as a Medical Device (SaMD) Guidelines Alignment
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright -->
+    <div class="border-top pt-4 d-flex flex-column flex-sm-row align-items-center justify-content-between text-muted small">
+      <div>&copy; 2026 MediAI – AI Powered Smart Healthcare Management System. All rights reserved.</div>
+      <div class="d-flex align-items-center gap-3 mt-2 mt-sm-0">
+        <span>Java 17 Spring Boot 3</span>
+        <span>•</span>
+        <span>MySQL 8.0</span>
+        <span>•</span>
+        <span>Thymeleaf + Bootstrap 5</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

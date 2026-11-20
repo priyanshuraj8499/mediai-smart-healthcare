@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediAI – Smarter Healthcare, Powered by Artificial Intelligence</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom Medical CSS -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content -->
+<main class="flex-grow-1">
+
+  <!-- Emergency Quick Banner -->
+  <div class="container-fluid px-lg-5 pt-3">
+    <div th:replace="~{fragments/alerts :: emergencyNotice}"></div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="py-5 bg-gradient" style="background: linear-gradient(180deg, #F0F7FF 0%, #FFFFFF 100%);">
+    <div class="container-fluid px-lg-5">
+      <div class="row align-items-center g-5 py-4">
+        <!-- Left Hero Text -->
+        <div class="col-lg-7 text-center text-lg-start">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill badge-soft-blue mb-4">
+            <i class="bi bi-stars text-primary"></i>
+            <span class="small fw-semibold">Next-Generation Java Spring Boot 3 &amp; AI Healthcare Platform</span>
+          </div>
+
+          <h1 class="display-4 fw-extrabold text-dark mb-3 lh-sm">
+            Smarter Healthcare, Powered by <span class="text-primary">Artificial Intelligence.</span>
+          </h1>
+
+          <p class="lead text-muted mb-4 fs-6 pe-lg-5">
+            Transforming patient care and hospital administration through intelligent diagnosis, real-time patient monitoring, and smart healthcare management.
+          </p>
+
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-4">
+            <a th:href="@{/register}" class="btn btn-primary-medical px-4 py-3 d-inline-flex align-items-center gap-2">
+              <span>Get Started</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+            <a th:href="@{/features}" class="btn btn-outline-medical px-4 py-3">
+              Explore Features
+            </a>
+          </div>
+
+          <div class="row g-3 pt-3 border-top border-200">
+            <div class="col-4 d-flex align-items-center gap-2 small text-muted">
+              <i class="bi bi-shield-check text-success fs-5"></i>
+              <span>HIPAA Compliant</span>
+            </div>
+            <div class="col-4 d-flex align-items-center gap-2 small text-muted">
+              <i class="bi bi-activity text-teal fs-5" style="color: #14B8A6;"></i>
+              <span>24/7 Telemetry</span>
+            </div>
+            <div class="col-4 d-flex align-items-center gap-2 small text-muted">
+              <i class="bi bi-cpu text-primary fs-5"></i>
+              <span>Clinical Triage</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Visual Card -->
+        <div class="col-lg-5">
+          <div class="mediai-card p-4 p-md-5 border-2 position-relative">
+            <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-3 p-2 bg-primary text-white">
+                  <i class="bi bi-heart-pulse-fill fs-5 animate-heart"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Ambulatory Telemetry</h6>
+                  <small class="text-success fw-semibold"><i class="bi bi-dot"></i> Live Sensor Online</small>
+                </div>
+              </div>
+              <span class="badge badge-soft-blue">Patient #1049</span>
+            </div>
+
+            <!-- Vitals 4-Grid -->
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-light border">
+                  <div class="text-muted text-uppercase small" style="font-size: 0.7rem; font-weight: 700;">Heart Rate</div>
+                  <div class="h3 fw-bold text-dark my-1">74 <span class="fs-6 text-muted fw-normal">BPM</span></div>
+                  <span class="badge badge-soft-green">Normal Sinus</span>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-light border">
+                  <div class="text-muted text-uppercase small" style="font-size: 0.7rem; font-weight: 700;">Blood Pressure</div>
+                  <div class="h3 fw-bold text-dark my-1">120/78 <span class="fs-6 text-muted fw-normal">mmHg</span></div>
+                  <span class="badge badge-soft-blue">Normotensive</span>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-light border">
+                  <div class="text-muted text-uppercase small" style="font-size: 0.7rem; font-weight: 700;">Oxygen SpO2</div>
+                  <div class="h3 fw-bold text-dark my-1">98 <span class="fs-6 text-muted fw-normal">%</span></div>
+                  <span class="badge badge-soft-teal">Optimal Saturation</span>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-light border">
+                  <div class="text-muted text-uppercase small" style="font-size: 0.7rem; font-weight: 700;">Temperature</div>
+                  <div class="h3 fw-bold text-dark my-1">36.8 <span class="fs-6 text-muted fw-normal">°C</span></div>
+                  <span class="badge badge-soft-green">Afebrile</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Assessment Callout -->
+            <div class="p-3 rounded-3 badge-soft-blue border d-flex align-items-start gap-3">
+              <i class="bi bi-cpu-fill text-primary fs-4 mt-1"></i>
+              <div class="small">
+                <div class="fw-bold text-dark">AI Preliminary Assessment Active</div>
+                <div class="text-muted">Physiological metrics remain within normal ranges. Next scheduled follow-up on calendar.</div>
+              </div>
+            </div>
+
+            <a th:href="@{/patient/monitoring}" class="btn btn-dark w-100 mt-4 rounded-3 d-flex align-items-center justify-content-center gap-2">
+              <i class="bi bi-activity text-info"></i> Open Telemetry Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATISTICS SECTION (Fetched from Java Service) -->
+  <section class="py-4 border-top border-bottom bg-light">
+    <div class="container-fluid px-lg-5">
+      <div class="row text-center g-4">
+        <div class="col-6 col-md-3">
+          <div class="p-3 bg-white rounded-3 border">
+            <div class="h2 fw-extrabold text-primary mb-0" th:text="${stats.totalPatients}">3</div>
+            <div class="text-muted small fw-semibold text-uppercase mt-1" style="font-size: 0.75rem;">Active Patients</div>
+            <small class="text-muted">Continuous telemetry</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 bg-white rounded-3 border">
+            <div class="h2 fw-extrabold text-teal mb-0" style="color: #14B8A6;" th:text="${stats.totalDoctors}">4</div>
+            <div class="text-muted small fw-semibold text-uppercase mt-1" style="font-size: 0.75rem;">Specialist Doctors</div>
+            <small class="text-muted">Across 6 major wings</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 bg-white rounded-3 border">
+            <div class="h2 fw-extrabold text-dark mb-0">
+              <span th:text="${stats.availableBeds}">72</span> / <span th:text="${stats.totalBeds}">270</span>
+            </div>
+            <div class="text-muted small fw-semibold text-uppercase mt-1" style="font-size: 0.75rem;">Available Beds</div>
+            <small class="text-muted" th:text="${stats.occupancyRate + '% hospital occupancy'}">74% occupancy</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 bg-white rounded-3 border">
+            <div class="h2 fw-extrabold text-success mb-0">&lt; 3.2s</div>
+            <div class="text-muted small fw-semibold text-uppercase mt-1" style="font-size: 0.75rem;">AI Triage Speed</div>
+            <small class="text-muted">Instant differential score</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HEALTHCARE SERVICES SECTION -->
+  <section class="py-5 bg-white">
+    <div class="container-fluid px-lg-5">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="badge badge-soft-blue mb-2 text-uppercase fw-bold">Core Modules</span>
+        <h2 class="fw-extrabold text-dark">Designed for Modern Healthcare Ecosystems</h2>
+        <p class="text-muted small">MediAI unites patient self-advocacy with physician-grade clinical decision support and hospital resource orchestration.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Service 1: AI Diagnosis -->
+        <div class="col-lg-3 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-primary text-white d-inline-block mb-3">
+                <i class="bi bi-cpu fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">AI Preliminary Diagnosis</h5>
+              <p class="text-muted small mt-2">
+                Evaluates reported symptoms, duration, and medical history against evidence-based clinical rules with differential probability scoring.
+              </p>
+            </div>
+            <a th:href="@{/patient/diagnosis}" class="btn btn-outline-medical btn-sm mt-3 w-100">
+              Check Symptoms <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service 2: Monitoring -->
+        <div class="col-lg-3 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 text-white d-inline-block mb-3" style="background-color: #14B8A6;">
+                <i class="bi bi-activity fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Real-Time Telemetry</h5>
+              <p class="text-muted small mt-2">
+                Continuous logging of Heart Rate (BPM), Blood Pressure, SpO2, and body temperature with automated anomaly detection alerts.
+              </p>
+            </div>
+            <a th:href="@{/patient/monitoring}" class="btn btn-outline-medical btn-sm mt-3 w-100">
+              View Telemetry <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service 3: Smart Appointments -->
+        <div class="col-lg-3 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-dark text-white d-inline-block mb-3">
+                <i class="bi bi-calendar2-check fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Smart Appointments</h5>
+              <p class="text-muted small mt-2">
+                Database-validated slot reservations preventing double bookings with doctor approval and telehealth meeting integration.
+              </p>
+            </div>
+            <a th:href="@{/patient/book-appointment}" class="btn btn-outline-medical btn-sm mt-3 w-100">
+              Book Appointment <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service 4: Admin Management -->
+        <div class="col-lg-3 col-md-6">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="p-3 rounded-3 bg-success text-white d-inline-block mb-3">
+                <i class="bi bi-hospital fs-4"></i>
+              </div>
+              <h5 class="fw-bold text-dark">Hospital Administration</h5>
+              <p class="text-muted small mt-2">
+                Executive analytics into ICU and inpatient bed availability, departmental utilization, staff schedules, and emergency trauma triage.
+              </p>
+            </div>
+            <a th:href="@{/admin/dashboard}" class="btn btn-outline-medical btn-sm mt-3 w-100">
+              Admin Portal <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS SECTION -->
+  <section class="py-5 bg-light border-top">
+    <div class="container-fluid px-lg-5">
+      <div class="text-center mb-5">
+        <span class="badge badge-soft-blue mb-2 text-uppercase fw-bold">Clinical Trust</span>
+        <h2 class="fw-extrabold text-dark">Endorsed by Clinicians &amp; Hospital Directors</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <p class="small text-muted fst-italic">
+              "MediAI's triage assistant reduced emergency room triage delays by 35% through structured symptom scoring before physician examination."
+            </p>
+            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+              <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=256" class="rounded-circle" width="44" height="44" alt="Doctor">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark small">Dr. Marcus Vance, MD</h6>
+                <small class="text-muted">Chief of Cardiology</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <p class="small text-muted fst-italic">
+              "The live telemetry monitor gave me continuous peace of mind following my cardiac stent. The alert spotted a mild arrhythmia early."
+            </p>
+            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256" class="rounded-circle" width="44" height="44" alt="Patient">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark small">Alexander Hayes</h6>
+                <small class="text-muted">Cardiac Recovery Patient</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mediai-card p-4 h-100 d-flex flex-column justify-content-between">
+            <p class="small text-muted fst-italic">
+              "From bed allocation tracking to conflict-free appointment queues, MediAI has unified our clinical workflows in one place."
+            </p>
+            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=256" class="rounded-circle" width="44" height="44" alt="Admin">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark small">Dr. Sarah Jenkins</h6>
+                <small class="text-muted">Hospital Chief Administrator</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
